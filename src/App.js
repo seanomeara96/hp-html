@@ -241,13 +241,13 @@ function App() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const slideCount = slideData.length;
+
   const [timer] = useState(
     setTimeout(() => {
       setCurrentSlide(currentSlide + 1 < slideCount ? currentSlide + 1 : 0);
     }, 5000)
   );
-
-  const slideCount = slideData.length;
 
   useEffect(() => {
     clearTimeout(timer);
