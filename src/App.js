@@ -72,7 +72,7 @@ function slideString(idx, slideData) {
 }
 
 function Slide(props) {
-  const { idx, slideData, currentSlide } = props;
+  const { idx, slideData, currentSlide, desktop } = props;
   const { slideDestination, desktopImageURL, mobileImageURL, altText } =
     slideData;
   const classes = `som-slides__slide ${
@@ -82,14 +82,16 @@ function Slide(props) {
   return (
     <a className={classes} href={slideDestination}>
       <picture style={{ width: "100%" }}>
-        <source
-          srcSet={
-            desktopImageURL.length
-              ? desktopImageURL
-              : "https://source.unsplash.com/random/1440x600"
-          }
-          media="(min-width: 500px)"
-        />
+        {desktop && (
+          <source
+            srcSet={
+              desktopImageURL.length
+                ? desktopImageURL
+                : "https://source.unsplash.com/random/1440x600"
+            }
+            media="(min-width: 500px)"
+          />
+        )}
         <img
           style={{ width: "100%", objectFit: "cover" }}
           src={
@@ -310,15 +312,38 @@ function App() {
         </div>
       </div>
 
-      <div className="som-slides">
-        {slideData.map((data, idx) => (
-          <Slide
-            idx={idx}
-            currentSlide={currentSlide}
-            slideData={data}
-            key={idx}
-          />
-        ))}
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-evenly",
+        }}
+      >
+        {window.innerWidth > "500" && (
+          <div className="som-slides" style={{ width: "400px" }}>
+            {slideData.map((data, idx) => (
+              <Slide
+                idx={idx}
+                currentSlide={currentSlide}
+                slideData={data}
+                key={idx}
+                mobile
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="som-slides">
+          {slideData.map((data, idx) => (
+            <Slide
+              idx={idx}
+              currentSlide={currentSlide}
+              slideData={data}
+              key={idx}
+              desktop
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
