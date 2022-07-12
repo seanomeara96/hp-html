@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function boilerPlate(slides) {
   return /*html*/ `
@@ -236,15 +236,22 @@ function App() {
     mobileImageURL: "",
     altText: "",
   });
+
   const [slideData, setSlideData] = useState(initialState);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const [timer] = useState(
+    setTimeout(() => {
+      setCurrentSlide(currentSlide + 1 < slideCount ? currentSlide + 1 : 0);
+    }, 5000)
+  );
+
   const slideCount = slideData.length;
 
-  setTimeout(() => {
-    setCurrentSlide(currentSlide + 1 < slideCount ? currentSlide + 1 : 0);
-  }, 5000);
+  useEffect(() => {
+    clearTimeout(timer);
+  });
 
   return (
     <div>
