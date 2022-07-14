@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function boilerPlate(slides) {
   return /*html*/ `
@@ -138,7 +138,7 @@ function SlideForm({ idx, data, updateHandler }) {
         />
       </div>
       <div className="field">
-        <label>Desktop Image URL</label>
+        <label>Desktop Image URL (1440px * 600px)</label>
         <input
           placeholder="URL for Desktop Image"
           type="text"
@@ -149,7 +149,7 @@ function SlideForm({ idx, data, updateHandler }) {
         />
       </div>
       <div className="field">
-        <label>Mobile Image URL</label>
+        <label>Mobile Image URL (415px * 490px)</label>
         <input
           placeholder="URL fo Mobile Image"
           type="text"
@@ -243,15 +243,22 @@ function App() {
 
   const slideCount = slideData.length;
 
-  const [timer] = useState(
-    setTimeout(() => {
-      setCurrentSlide(currentSlide + 1 < slideCount ? currentSlide + 1 : 0);
-    }, 5000)
-  );
+  const timerRef = useRef(null);
 
   useEffect(() => {
-    clearTimeout(timer);
+    if(timerRef.current){
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      setCurrentSlide(currentSlide + 1 < slideCount ? currentSlide + 1 : 0);
+    }, 5000);
+
+    return () => clearTimeout(timerRef.current);
   });
+
+ 
+
+  
 
   return (
     <div>
